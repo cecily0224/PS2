@@ -1,0 +1,174 @@
+---
+title: "Survey Report Concerning Conservative Voters in Markham, Ontario"
+author: "Agnes Chu, Mu Lu, Cecily Liu"
+date: "10/6/2020"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Summary
+
+The importance of understanding your voters and non voters is important to any political party. In this report, the result of a survey asking 1000 random participants in Walmart, is shown and discussed. Using simple random sampling and stratified random sampling allows us to find trends for the population of Markham. The use of this data allows for analysis of this population, helping with future changes to the Conservative Party platform to target non voters. The positive relationship between Asians and Conservative voters help us further analyze existing and past policies to see how it can further benefit this group. As well, the inverse relationship between party satisfaction and education allows us to adjust policies to help with the voters' satisfaction level. The main goal of this study is to shed light on what is currently working and what needs to be changed to better benefit the residences of Markham. 
+
+# Introduction
+
+The Conservative Party has been one of the major political parties of Canada for numerous decades. With Markham being one of the major cities in the Greater Toronto Area, it is no doubt important to understand how the residences see the Conservative Party. The anonymous survey created is made to bring insight into the residences' views, allowing for analysis and further discussion on possible trend amongst the voters for and against the party. We ask various questions to gain knowledge on the participants race, gender, education and income, to see if there are any trends related to whether they had voted for the Conservative party or not. The distribution of these variables are then used in histograms or bar graphs. 
+
+Due to the rather short survey, it can not give us insight on every possible trend, but it can provide the party with additional information that can help with further more targeted research. As well, the cost of the survey needs to be taken account of.  
+
+# Methodology
+
+In the city of Markham, Ontario, a survey was designed and carried out where 1000 random participants located in various Walmarts were asked various questions in relation to their backgrounds and voting preferences. In each of the 5 locations, 200 participants that answered 'Yes' when asked if they lived in Markham, were chosen for this survey. Please refer to Appendix 1 for the survey questions. As shown, all questions are either dichotomous, multiple choice, or scales making the data taken to be easier to interpret.
+
+The sampling approach included a simple random sample where any member of the 351,552 inhabitants of Markham (as of 2020) all have an equal chance of being selected, allowing for the sample to represent the Markham population. The lack of favouritism is represented by the fact that Walmart is a politically and racially neutral place, where no matter one's jobs, gender, income, or age, you will be able to see them there. As well, a stratified random sample by the key characteristics of interest was chosen. This ensures that the sample will have various representations of the population. 
+
+The surveyors first introduced themselves as volunteers from a Canadian polling company. After ensuring the participant lives in Markham, they are asked whether they would like to participate for a 5 dollars Tim Hortons gift card. Once accepted, they are provided with the survey and pens. Due to the anonymous nature of this survey, the participants information will not be required. When interacting with possible participants, volunteers need to make sure they are not pressuring them. Due to the survey size, there will be an approximate cost of 7000 dollars where 5000 dollars will be for the compensation amount, and the rest for the printing of surveys and food for volunteers. As well, we estimate that this survey will span 3 days and at least 10 volunteers are needed. 
+
+# Survey Data
+
+The results from the survey provides us with insight on various correlations between various groups and whether they will vote for the Conservative part or not. Please refer below for the raw data collected and the 'cleaned up' data where only eligible voter's information are shown. Please refer to Appendix 2 for the full frames showing all collected data. 
+
+Taking into consideration the possibility of no response to certain questions, we will use 'NA' to represent these answers and they will be filtered out. The relatively large sample size will allow our results to not be too significantly affected. As well, this is useful when interpreting the data collected.
+
+
+```{r, include=FALSE}
+
+library(tibble)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+#simulating results according to created survey
+
+set.seed(1004097443)
+survey_size <- 1000
+
+my_data <- tibble(
+  eligible = sample(x= c("YES","NO"), size = survey_size,
+                    replace = TRUE, prob = c(0.9,0.1)),
+  Race = sample(x=c("Asian", "African Americans", "Caucasian"), size = survey_size, replace = TRUE, prob=c(0.45,0.15,0.4)),
+  gender = sample(x = c("Male","Female"), size = survey_size,
+               replace = TRUE, prob = c(0.45,0.55)),
+  education = sample(x= c("High school not completed","High school completed","College/University complete",
+                          "Master completed","Phd or higher completed"), size = survey_size,replace = TRUE, prob = c(0.25,0.3,0.3,0.1,0.05)),
+  income = sample(x = c("0-40000","40001-80000","80001 or more"), size = survey_size, replace = TRUE, prob = c(0.35,0.45,0.2)),
+  Satisfaction = sample(x=1:5, size = survey_size, replace = TRUE, prob=c(0.1,0.3,0.3,0.2,0.1)),
+  VoteForParty = sample(x=c("YES","NO"), size = survey_size, replace = TRUE,prob=c(0.5,0.5)),
+)
+
+```
+
+```{r}
+head(my_data)
+```
+
+```{r, include=FALSE}
+#cleaning data- filtering out those that can't vote
+my_data_yes<-
+  my_data%>%
+  filter(my_data$eligible == "YES")
+```
+
+```{r}
+head(my_data_yes)
+```
+
+# Discussion
+
+Referring to Appendix 3, we can see from the data collected that there is an obvious difference between Asian voters in Graph 1. As opposed to African Americans or Caucasians that are almost even in voters that will or will not vote for the Conservative Party, there are more Asians that will vote for the Conservatives. We can conclude that on average there is a higher chance that Asians will vote for the Conservatives, as opposed to African Americans or Caucasians. Due to the almost even amounts of votes in the other two race, we can not make such conclusions. But from the data, we can see that in this sample, African Americans also tend towards voting for the Conservatives. One possible reason for such results could be do to the fact that past policies that the Conservatives have enacted have either greatly benefited the Asian community, or the policies of other parties like the Liberals have impacted the Asian community in a negative way. Voters tend to vote for parties whose past policies or current platform stances align with their own. 
+
+Now looking at Graph 2, we can see that there seems to be an average of 3 in satisfaction levels for the Conservative Party. As well, those that have a masters degree seem to have the highest satisfaction on average, whilst those that have a PHD or higher have the lowest. Upon further analysis, Graph 3 depicts the total satisfaction level of each education group. For those that have yet to graduate from high school, there is a more normal distribution where most participants rated 3. This is different from those that have completed high school where most participants have voted 2 or 3. This shows that there is a relatively big change once one graduates from high school. This is even further proven looking at the results of those that have completed university or college. This group has a right skew compared to the two groups mentioned before. The inverse relationship between education and satisfaction show the disparity between the party's platform and those in the working class. This is particularly important. As seen in the data, those that have gradated high school and university/college make up the cast majority of the participants. As well, knowing that most of the work force is made up these 2 groups, it's safe to say that a majority of voters will comprise of these 2 groups. Given this information, to increase the party's votes, it is important to find the reason behind such low ratings and improve it. This information can be used for further studies, as it narrows down the target audience for change. Looking at Graph 4, we can see that those that voted 'YES' is more right skewed then we would like. As mentioned before, by increasing voters satisfaction, this can further ensure the amount of people that vote for the Conservative party. 
+
+Another important measure is one's income. From Graph 5 we can see that most of our voters are from the middle and lower class. As well, those that are in these classes are more likely to vote for Conservative than those in the upper class. This is in tune to the rational that people tend to vote for parties that align with their interests. To further capture more voters, future policies can be further aimed at middle classes, as that seems to make up most of the sample. This makes sense as most of Markham is made up of middle class residences. 
+
+
+
+# Appendix
+
+## 1. Survey
+
+1.	Are you eligible to vote? (Yes/ NO)
+
+2.	Race (Asian, Africa Americans, Caucasian)
+
+3.	Education (High school not completed, High school completed, College/university completed, Master’s degree completed, PHD or higher completed)
+
+4.	Income annually (0-40000, 40000-80000, 80000 or more)
+
+5.	How satisfied are you to our party (scale from 1 to 5)?
+
+6.	Are you going to vote for our Party (Yes/NO)?
+
+## 2. Full Raw Data
+```{r}
+my_data
+
+```
+
+## 3. Graphs
+```{r}
+#we can conclude that asian people and African American people are tended to vote for the conservative while Christians are tend to not support the conservative. 
+ggplot(data = my_data_yes, 
+       aes(x = Race, 
+           fill = VoteForParty)) + 
+  geom_bar(position = "dodge") +
+  labs(title="Graph 1:Relationship between Race and Voting"
+       )
+```
+
+```{r}
+#we can conclude that people who get master degree have the highest satisfaction towars our party. and the average satisfaction is 3 which is median.
+plotdata <- my_data_yes %>%
+  group_by(education) %>%
+  summarize(mean_sats = mean(Satisfaction))
+ggplot(plotdata, 
+       aes(x = education, 
+           y = mean_sats)) +
+  geom_bar(stat = "identity") +
+  labs(y="average satisfaction",x="Education Level",
+       title="Graph 2:Relationship between Education Level with average satisfaction"
+       )+
+  theme_linedraw()
+
+```
+
+```{r}
+# plots for education and satisfaction in details by counts
+ggplot(data = my_data_yes, 
+       aes(x = Satisfaction, 
+           fill = education)) + 
+  geom_bar(position = "dodge") +
+  labs(
+       title="Graph 3:Relationship between satisfaction with  education"
+  )
+```
+```{r}
+
+# not all people who have high satisfaction with our party will vote for our party (exception is 4)
+ggplot(data = my_data_yes, 
+       aes(x = Satisfaction, 
+           fill = VoteForParty)) + 
+  geom_bar(position = "dodge") +   labs(
+    title="Graph 4:Relationship between Satisfaction and  VoteForParty"
+  )
+```
+
+
+```{r}
+#higher income will result lower vote for the conservative while lower income people are tend to vote for our party
+ggplot(data = my_data_yes, 
+       aes(x = income, 
+           fill = VoteForParty)) + 
+  geom_bar(position = "dodge") +
+  labs(
+    title="Graph 5:Relationship between income and  VoteForParty"
+  )
+```
+
+
+# References 
